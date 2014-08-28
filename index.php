@@ -2,7 +2,10 @@
 
 
 define("TOKEN","weixin");
-require_once './mysql_sae.func.php';
+if(true){
+	require_once './mysql_sae.func.php';
+    require_once("./simple_html_dom.php");
+}
 
 $wechatObj = new wechatCallbackapiTest();
 if(isset($_GET['echostr'])){
@@ -111,7 +114,7 @@ class wechatCallbackapiTest
         switch ($object->Event)
         {
             case "subscribe":
-                $content = "欢迎关注“怀化违章查询”的公众帐号。\n小助每月会向您推送违章信息、用车知识和油价信息。\n具体功能请发送如下指令：\n1、查询天气信息：天气+地名，如天气+怀化\n2、查询违章信息：违章+车牌号+发动机后五位，如违章+N12345+12345\n3、绑定车辆信息：绑定+车牌号+发动机后五位，如绑定+N12345+12345\n4、解绑信息：解绑+车牌号，如解绑+N12345\n";
+                $content = "欢迎关注“怀化路况”的公众帐号。\n小助每月会向您推送违章信息、用车知识和油价信息。\n具体功能请发送如下指令：\n1、查询天气信息：天气+地名，如天气+怀化\n2、查询违章信息：违章+车牌号+发动机后五位，如违章+N12345+12345\n3、绑定车辆信息：绑定+车牌号+发动机后五位，如绑定+N12345+12345\n4、解绑信息：解绑+车牌号，如解绑+N12345\n";
             	$content .="注意：绑定车辆信息之后，小助会定期为您查询违章信息，如有新违章，小助会第一时间通知您。另外绑定了车辆信息的用户可以直接输入：违章，查询违章信息。";
                 break;
         }
@@ -132,17 +135,18 @@ class wechatCallbackapiTest
 			if(trim($cmdArr[0] == '违章')){
                 if(count($cmdArr)==3){
 					//假如输入的格式为：违章+aaaaaa+12345，则直接查找，无需从数据库进行查询
-					$tvObj = new trafficViolationApi();
-					$originDataStrzxc = $tvObj->getHHData($cmdArr[1], $cmdArr[2]);
-					$originDataArr = $tvObj->prepareDatatmp($originDataStrzxc,$cmdArr[1], $cmdArr[2]);
-				   
-					//$contentStr = $cmdArr[0].$cmdArr[1];
-					//if(strlen($contentStr)<=0){
-					//	$contentStr = "没有查找到数据";
-					//}
-					//$resultStr = $this->transmitText($object, $originDataStrzxc);
-					$resultStr = $this->transmitNew($object, $originDataArr);
-					//return $resultStr;
+					//先检查下参数格式
+					$paramCheckobj = new ParamCheckUtil();
+					$checkResultArray = $paramCheckobj->trafficViolationParamCheck($cmdArr[0], $cmdArr[1], $cmdArr[2]);
+					if((is_array($checkResultArray)==1) && (count($checkResultArray)==4) && ($checkResultArray[0]==true)){
+						$tvObj = new trafficViolationApi();
+						$originDataStrzxc = $tvObj->getHHData($checkResultArray[2], $checkResultArray[3]);
+						$originDataArr = $tvObj->prepareDatatmp($originDataStrzxc,$checkResultArray[2], $checkResultArray[3]);
+						$resultStr = $this->transmitNew($object, $originDataArr);
+					}else{
+						$contentStr = "命令格式错误，正确的格式为：违章+aaaaaa+12345";
+						$resultStr = $this->transmitText($object, $contentStr);
+					}
 				}else if(count($cmdArr)==1){
 					//如果只输入:违章，则尝试从数据库加载车牌、发动机号码等信息
                     $flag = $this->getBindingNum($object);
@@ -161,9 +165,9 @@ class wechatCallbackapiTest
                         $resultStr = $this->transmitText($object, $contentStr);
                         }
                     }elseif($flag > 1){
-                            $contentStr = $this->autoBindingInfo($object);
+                        $contentStr = $this->autoBindingInfo($object);
                 
-                			$resultStr = $this->transmitNews($object, $contentStr);
+                        $resultStr = $this->transmitNews($object, $contentStr);
                      
                     }else{
                         //没有绑定信息
@@ -370,7 +374,8 @@ class wechatCallbackapiTest
             
             $valueArray = $listObj->getValueData($plateNumber, $engineNumber);
             
-            //$instoreflag = $listObj->checkDatatmp($valueArray, $plateNumber, $engineNumber);
+            $instoreflag = $listObj->checkDatatmp($valueArray, $plateNumber, $engineNumber);		//将违章信息存入数据库
+            
             
             $flagInfo = $listObj->updateDatatmp($valueArray, $plateNumber);
             
@@ -385,7 +390,7 @@ class wechatCallbackapiTest
         
 
         return $InfoArr;
-        //return $flagInfo;
+        //return $instoreflag;
     }
     
     //绑定用户
@@ -484,35 +489,43 @@ class trafficViolationApi
 		 
 		preg_match_all("/<li class='address'><div class='item'><b>(.*?)<\/b><span>(.*?)(<\/span>)*<\/div><\/li>/", $return, $title);
 		 
-		//var_dump($title);
-		//echo $return; 
 		if(count($title)==4){
 			$textArray = $title[1];
 			$valueArray = $title[2];
-			//var_dump($textArray);
-			//echo "<br /><br />";
-			//var_dump($valueArray);
-			//echo "<br /><br />";
+
 			$textCount = count($textArray);
 			$valueCount = count($valueArray);
 			$curCount = ($textCount>$valueCount)?$valueCount:$textCount;
             if($curCount<=0){
-            	return "恭喜，您没有任何违章信息。";
+            	$resultStr = "恭喜，您没有任何违章信息。";
             }
-			//echo "count:".$curCount." ".$textCount." ".$valueCount;
-			$resultStrArr = "";
-			for($i=0;$i<$curCount;$i++){
-                $resultStrArr[$i/10] .= ($textArray[$i].$valueArray[$i]." \n");
+			//获取页面上的错误提示信息
+			if($textCount==0 && $valueCount==0){
+                $dom_tmp = str_get_dom($return);
+                $msg = $dom_tmp->find('div[class=spx]', 0);
+                if(count($msg)==1){
+					$resultStr = trim($msg->plaintext);
+					
+				}else{
+					$resultStr = "恭喜，您没有任何违章信息。";
+				}
+            }else{
+				$resultStrArr = "";
+				for($i=0;$i<$curCount;$i++){
+					$resultStrArr[$i/10] .= ($textArray[$i].$valueArray[$i]." \n");
+				}
+				//数据过多的话，只返回第一条，其他的放到详情页中
+				/*foreach($resultStrArr as $curResultStr){
+					$resultStr .= $curResultStr."\n";
+				}*/
+				$resultStr = $resultStrArr[0];
 			}
-			//数据过多的话，只返回第一条，其他的放到详情页中
-            /*foreach($resultStrArr as $curResultStr){
-            	$resultStr .= $curResultStr."\n";
-            }*/
-            $resultStr = $resultStrArr[0];
-			return $resultStr;
+			
 		}else{
-			return "获取信息失败";
+			$resultStr = "获取信息失败";
 		}
+		
+		return $resultStr;
 	}
 	
 	public function prepareDatatmp($content,$plateNumber,$engineNumber){
@@ -526,6 +539,7 @@ class trafficViolationApi
 		return $dataArr; 
 	}
     
+    //获取valueArray数组
     public function getValueData($plateNumber,$engineNumber){
         $uri = "http://so.jtjc.cn/pl";
 		// 参数数组
@@ -560,8 +574,50 @@ class trafficViolationApi
         return $valueArray;
     }
     
-   
+    //存储违章信息进peccancyInfo表
+    public function checkDatatmp($valueArray, $plate_num, $engine_num){
+        
+        $valueNum = count($valueArray);
+        $nowtime = date("Y-m-d G:i:s");
+        for($i=0; $i<($valueNum/10); $i++){
+            //$plate_num = $valueArray[0];
+            $office_a = $valueArray[$i*10];
+            $place_a = $valueArray[$i*10+1];
+       		$actioncode_a = $valueArray[$i*10+2];
+            $point_a = $valueArray[$i*10+3];
+            $money_a = $valueArray[$i*10+4];
+            $action_a = $valueArray[$i*10+5];
+            $law_a = $valueArray[$i*10+6];
+        	$occurtime_a = $valueArray[$i*10+7];
+       		$flag_a = $valueArray[$i*10+8];
+            $origin_a = $valueArray[$i*10+9];
+
+        	//判断违章信息是否储存，采用车牌号，违章行为代码，违章时间三值确定
+            
+            $rows = 0;
+        	$select_sql = "select * from peccancyInfo where plate_num='$plate_num' and actioncode='$actioncode_a' and occurtime='$occurtime_a'";
+
+			$result = _select_data($select_sql);
+        
+        	if($rows = mysql_fetch_array($result,MYSQL_ASSOC)){
+            	//检测更新违章是否缴费信息
+            	$ret = 1;  //违章数据已存入数据库
+        	}else{
+            	//插入数据
+            	$insert_sql = "insert into peccancyInfo(plate_num, engine_num, office, place, actioncode, point, money, action, law, occurtime, flag, origin, update_time) values('$plate_num', '$engine_num', '$office_a','$place_a','$actioncode_a','$point_a','$money_a','$action_a', '$law_a','$occurtime_a','$flag_a','$origin_a', '$nowtime')";
+
+				$res = _insert_data($insert_sql);
+            	if($res == 1){
+                	$ret = 2;  //插入成功
+				}else{
+                	$ret = 0;  //插入失败
+            	}
+        	}
+        }
+        return $ret;
+    }
     
+    //计算并存储违章概要进peccancyBerif表
     public function updateDatatmp($valueArray, $plate_num){
         
         //$allitems = 0;
@@ -619,6 +675,7 @@ class trafficViolationApi
         
     }
     
+    //合成违章概要信息
     public function getMultieDatatmp($plateNumber,$engineNumber){
         
         $select_sql = "select * from peccancyBerif where plate_num='$plateNumber'";
@@ -657,4 +714,41 @@ class trafficViolationApi
         
 }
 
+
+class ParamCheckUtil
+{
+	//检查输入参数的格式，格式必须为违章+aaaaaa+12345，如果格式正确，则返回里面有四个元素的数组，首个元素标记诶true或者false，表示参数检测的结果
+	public function trafficViolationParamCheck($cmd,$plateNumber,$engineNumber){
+		$finalParams = array();
+		$checkFlag = true;//标记参数检测的结果
+		$finalCmd = trim($cmd);
+		$finalPlateNumber = trim($plateNumber);
+		$finalEngineNumber = trim($engineNumber);
+		if(trim($cmd)=="违章"){
+			$finalParams[1] = $finalCmd;
+		}else{
+			$checkFlag = false;
+		}
+		//车牌号
+		$finalPlateNumberLength = strlen($finalPlateNumber);
+		if($finalPlateNumberLength==6){
+			$finalParams[2] = $finalPlateNumber;
+		}else if(($finalPlateNumberLength==9) && strpos($finalPlateNumber,"湘")==0){//中文长度为3
+			$finalParams[3] = substr($finalPlateNumber,3);
+		}else{
+			$checkFlag = false;
+		}
+		//引擎号
+		if(strlen($engineNumber)==5){
+			$finalParams[3] = $finalEngineNumber;
+		}else{
+			$checkFlag = false;
+		}
+		//将标记的结果填充到返回数组中
+		$finalParams[0] = $checkFlag;
+		
+		return $finalParams;
+	}
+	
+}
 ?>
