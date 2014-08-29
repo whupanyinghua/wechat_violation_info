@@ -299,10 +299,10 @@ class wechatCallbackapiTest
 					<MsgType><![CDATA[news]]></MsgType>
 					<ArticleCount>%s</ArticleCount>
 					<Articles>
-					$item_str</Articles>
+					%s</Articles>
 					</xml>";
 
-        $result = sprintf($newsTpl, $object->FromUserName, $object->ToUserName, time(), count($newsArray));
+        $result = sprintf($newsTpl, $object->FromUserName, $object->ToUserName, time(), count($newsArray), $item_str);
         return $result;
     }
 	
@@ -329,10 +329,10 @@ class wechatCallbackapiTest
 					<MsgType><![CDATA[news]]></MsgType>
 					<ArticleCount>%s</ArticleCount>
 					<Articles>
-					$item_str</Articles>
+					%s</Articles>
 					</xml>";
 
-        $result = sprintf($newsTpl, $object->FromUserName, $object->ToUserName, time(), 1);
+        $result = sprintf($newsTpl, $object->FromUserName, $object->ToUserName, time(), 1, $item_str);
         return $result;
     }
     
