@@ -3,7 +3,7 @@
 
 define("TOKEN","weixin");
 if(true){
-	require_once './mysql_sae.func.php';
+	require_once("./mysql_sae.func.php");
     require_once("./simple_html_dom.php");
 }
 
@@ -64,15 +64,15 @@ class wechatCallbackapiTest
                         <Content><![CDATA[%s]]></Content>
                         <FuncFlag>0</FuncFlag>
                         </xml>";
-			if($keyword=="?" || $keyword=="£¿"){
+			if($keyword=="?" || $keyword=="ï¼Ÿ"){
 				$msgType = "text";
-				$contentStr = "Ğ¡Öú¹¦ÄÜÇë·¢ËÍÈçÏÂÖ¸Áî£º\n1¡¢²éÑ¯ÌìÆøĞÅÏ¢£ºÌìÆø+µØÃû£¬ÈçÌìÆø+»³»¯\n2¡¢²éÑ¯Î¥ÕÂĞÅÏ¢£ºÎ¥ÕÂ+³µÅÆºÅ+·¢¶¯»úºóÎåÎ»£¬ÈçÎ¥ÕÂ+N12345+12345\n3¡¢°ó¶¨³µÁ¾ĞÅÏ¢£º°ó¶¨+³µÅÆºÅ+·¢¶¯»úºóÎåÎ»£¬Èç°ó¶¨+N12345+12345\n4¡¢½â°óĞÅÏ¢£º½â°ó+³µÅÆºÅ£¬Èç½â°ó+N12345\n";
-            	$contentStr .="×¢Òâ£º°ó¶¨³µÁ¾ĞÅÏ¢Ö®ºó£¬Ğ¡Öú»á¶¨ÆÚÎªÄú²éÑ¯Î¥ÕÂĞÅÏ¢£¬ÈçÓĞĞÂÎ¥ÕÂ£¬Ğ¡Öú»áµÚÒ»Ê±¼äÍ¨ÖªÄú¡£ÁíÍâ°ó¶¨ÁË³µÁ¾ĞÅÏ¢µÄÓÃ»§¿ÉÒÔÖ±½ÓÊäÈë£ºÎ¥ÕÂ£¬²éÑ¯Î¥ÕÂĞÅÏ¢¡£";
+				$contentStr = "å°åŠ©åŠŸèƒ½è¯·å‘é€å¦‚ä¸‹æŒ‡ä»¤ï¼š\n1ã€æŸ¥è¯¢å¤©æ°”ä¿¡æ¯ï¼šå¤©æ°”+åœ°åï¼Œå¦‚å¤©æ°”+æ€€åŒ–\n2ã€æŸ¥è¯¢è¿ç« ä¿¡æ¯ï¼šè¿ç« +è½¦ç‰Œå·+å‘åŠ¨æœºåäº”ä½ï¼Œå¦‚è¿ç« +N12345+12345\n3ã€ç»‘å®šè½¦è¾†ä¿¡æ¯ï¼šç»‘å®š+è½¦ç‰Œå·+å‘åŠ¨æœºåäº”ä½ï¼Œå¦‚ç»‘å®š+N12345+12345\n4ã€è§£ç»‘ä¿¡æ¯ï¼šè§£ç»‘+è½¦ç‰Œå·ï¼Œå¦‚è§£ç»‘+N12345\n";
+            	$contentStr .="æ³¨æ„ï¼šç»‘å®šè½¦è¾†ä¿¡æ¯ä¹‹åï¼Œå°åŠ©ä¼šå®šæœŸä¸ºæ‚¨æŸ¥è¯¢è¿ç« ä¿¡æ¯ï¼Œå¦‚æœ‰æ–°è¿ç« ï¼Œå°åŠ©ä¼šç¬¬ä¸€æ—¶é—´é€šçŸ¥æ‚¨ã€‚å¦å¤–ç»‘å®šäº†è½¦è¾†ä¿¡æ¯çš„ç”¨æˆ·å¯ä»¥ç›´æ¥è¾“å…¥ï¼šè¿ç« ï¼ŒæŸ¥è¯¢è¿ç« ä¿¡æ¯ã€‚";
 				$resultStr = sprintf($textTpl,$fromUsername,$toUsername,$time,$msgType,$contentStr);
 				echo $resultStr;
 			}else{
 				$msgType = "text";
-				$contentStr = "ÔİÊ±²»Ö§³Ö[".$keyword."]Ö¸Áî£¬ÇëÊäÈë£¿²éÑ¯¾ßÌåÏà¹ØÖ¸Áî¡£";
+				$contentStr = "æš‚æ—¶ä¸æ”¯æŒ[".$keyword."]æŒ‡ä»¤ï¼Œè¯·è¾“å…¥ï¼ŸæŸ¥è¯¢å…·ä½“ç›¸å…³æŒ‡ä»¤ã€‚";
 				$resultStr = sprintf($textTpl,$fromUsername,$toUsername,$time,$msgType,$contentStr);
 				echo $resultStr;
 			}
@@ -107,35 +107,59 @@ class wechatCallbackapiTest
         }
 	}
 	
-	//½ÓÊÕÊÂ¼şÀàĞÍµÄÊäÈë
+	//æ¥æ”¶äº‹ä»¶ç±»å‹çš„è¾“å…¥
 	private function receiveEvent($object)
     {
         $content = "";
         switch ($object->Event)
         {
             case "subscribe":
-                $content = "»¶Ó­¹Ø×¢¡°»³»¯Â·¿ö¡±µÄ¹«ÖÚÕÊºÅ¡£\nĞ¡ÖúÃ¿ÔÂ»áÏòÄúÍÆËÍÎ¥ÕÂĞÅÏ¢¡¢ÓÃ³µÖªÊ¶ºÍÓÍ¼ÛĞÅÏ¢¡£\n¾ßÌå¹¦ÄÜÇë·¢ËÍÈçÏÂÖ¸Áî£º\n1¡¢²éÑ¯ÌìÆøĞÅÏ¢£ºÌìÆø+µØÃû£¬ÈçÌìÆø+»³»¯\n2¡¢²éÑ¯Î¥ÕÂĞÅÏ¢£ºÎ¥ÕÂ+³µÅÆºÅ+·¢¶¯»úºóÎåÎ»£¬ÈçÎ¥ÕÂ+N12345+12345\n3¡¢°ó¶¨³µÁ¾ĞÅÏ¢£º°ó¶¨+³µÅÆºÅ+·¢¶¯»úºóÎåÎ»£¬Èç°ó¶¨+N12345+12345\n4¡¢½â°óĞÅÏ¢£º½â°ó+³µÅÆºÅ£¬Èç½â°ó+N12345\n";
-            	$content .="×¢Òâ£º°ó¶¨³µÁ¾ĞÅÏ¢Ö®ºó£¬Ğ¡Öú»á¶¨ÆÚÎªÄú²éÑ¯Î¥ÕÂĞÅÏ¢£¬ÈçÓĞĞÂÎ¥ÕÂ£¬Ğ¡Öú»áµÚÒ»Ê±¼äÍ¨ÖªÄú¡£ÁíÍâ°ó¶¨ÁË³µÁ¾ĞÅÏ¢µÄÓÃ»§¿ÉÒÔÖ±½ÓÊäÈë£ºÎ¥ÕÂ£¬²éÑ¯Î¥ÕÂĞÅÏ¢¡£";
+                $content = "æ¬¢è¿å…³æ³¨â€œæ€€åŒ–è·¯å†µâ€çš„å…¬ä¼—å¸å·ã€‚\nå°åŠ©æ¯æœˆä¼šå‘æ‚¨æ¨é€è¿ç« ä¿¡æ¯ã€ç”¨è½¦çŸ¥è¯†å’Œæ²¹ä»·ä¿¡æ¯ã€‚\nå…·ä½“åŠŸèƒ½è¯·å‘é€å¦‚ä¸‹æŒ‡ä»¤ï¼š\n1ã€æŸ¥è¯¢å¤©æ°”ä¿¡æ¯ï¼šå¤©æ°”+åœ°åï¼Œå¦‚å¤©æ°”+æ€€åŒ–\n2ã€æŸ¥è¯¢è¿ç« ä¿¡æ¯ï¼šè¿ç« +è½¦ç‰Œå·+å‘åŠ¨æœºåäº”ä½ï¼Œå¦‚è¿ç« +N12345+12345\n3ã€ç»‘å®šè½¦è¾†ä¿¡æ¯ï¼šç»‘å®š+è½¦ç‰Œå·+å‘åŠ¨æœºåäº”ä½ï¼Œå¦‚ç»‘å®š+N12345+12345\n4ã€è§£ç»‘ä¿¡æ¯ï¼šè§£ç»‘+è½¦ç‰Œå·ï¼Œå¦‚è§£ç»‘+N12345\n";
+            	$content .="æ³¨æ„ï¼šç»‘å®šè½¦è¾†ä¿¡æ¯ä¹‹åï¼Œå°åŠ©ä¼šå®šæœŸä¸ºæ‚¨æŸ¥è¯¢è¿ç« ä¿¡æ¯ï¼Œå¦‚æœ‰æ–°è¿ç« ï¼Œå°åŠ©ä¼šç¬¬ä¸€æ—¶é—´é€šçŸ¥æ‚¨ã€‚å¦å¤–ç»‘å®šäº†è½¦è¾†ä¿¡æ¯çš„ç”¨æˆ·å¯ä»¥ç›´æ¥è¾“å…¥ï¼šè¿ç« ï¼ŒæŸ¥è¯¢è¿ç« ä¿¡æ¯";
+           		
+           
+            	//å‚¨å­˜å…³æ³¨ç”¨æˆ·ä¿¡æ¯ï¼Œå­˜å‚¨åœ¨addUser
+                $nowtime = date("Y-m-d G:i:s");
+           		$select_sql = "select * from addUser where from_user='$object->FromUserName'";
+
+				$searchflag = _select_data($select_sql);
+        
+        		if($rows = mysql_fetch_array($searchflag,MYSQL_ASSOC)){
+            		//æ£€æµ‹æ˜¯å¦å·²å­˜å‚¨äº†ç”¨æˆ·ä¿¡æ¯
+            		$content .= ".";  //å·²å­˜å‚¨ä¿¡æ¯
+        		}else{
+					$insert_sql = "insert into addUser(from_user, update_time) values('$object->FromUserName','$nowtime')";
+
+					$res = _insert_data($insert_sql);
+					if($res == 1){
+                        $content .= "ã€‚";   //æ·»åŠ æˆåŠŸ
+					}else{
+                        $content .= ".";	//æ·»åŠ å¤±è´¥
+					}
+                }
+               
+            
                 break;
         }
         $result = $this->transmitText($object, $content);
         return $result;
     }
 	
-	//½ÓÊÕTextÀàĞÍµÄÊäÈë
+	//æ¥æ”¶Textç±»å‹çš„è¾“å…¥
 	private function receiveText($object)
     {
         $resultStr = "";
         $keyword = trim($object->Content);
-		if($keyword=="?" || $keyword=="£¿" || $keyword=="help"){
+		if($keyword=="?" || $keyword=="ï¼Ÿ" || $keyword=="help"){
 			$resultStr = $this->help($object);
             //return $helpResult;
 		}else{
 			$cmdArr = explode("+",$keyword);
-			if(trim($cmdArr[0] == 'Î¥ÕÂ')){
+			if(trim($cmdArr[0] == 'è¿ç« ')){
                 if(count($cmdArr)==3){
-					//¼ÙÈçÊäÈëµÄ¸ñÊ½Îª£ºÎ¥ÕÂ+aaaaaa+12345£¬ÔòÖ±½Ó²éÕÒ£¬ÎŞĞè´ÓÊı¾İ¿â½øĞĞ²éÑ¯
-					//ÏÈ¼ì²éÏÂ²ÎÊı¸ñÊ½
+					//å‡å¦‚è¾“å…¥çš„æ ¼å¼ä¸ºï¼šè¿ç« +aaaaaa+12345ï¼Œåˆ™ç›´æ¥æŸ¥æ‰¾ï¼Œæ— éœ€ä»æ•°æ®åº“è¿›è¡ŒæŸ¥è¯¢
+					//å…ˆæ£€æŸ¥ä¸‹å‚æ•°æ ¼å¼
+                    
 					$paramCheckobj = new ParamCheckUtil();
 					$checkResultArray = $paramCheckobj->trafficViolationParamCheck($cmdArr[0], $cmdArr[1], $cmdArr[2]);
 					if((is_array($checkResultArray)==1) && (count($checkResultArray)==4) && ($checkResultArray[0]==true)){
@@ -144,11 +168,12 @@ class wechatCallbackapiTest
 						$originDataArr = $tvObj->prepareDatatmp($originDataStrzxc,$checkResultArray[2], $checkResultArray[3]);
 						$resultStr = $this->transmitNew($object, $originDataArr);
 					}else{
-						$contentStr = "ÃüÁî¸ñÊ½´íÎó£¬ÕıÈ·µÄ¸ñÊ½Îª£ºÎ¥ÕÂ+aaaaaa+12345";
+						$contentStr = "å‘½ä»¤æ ¼å¼é”™è¯¯ï¼Œæ­£ç¡®çš„æ ¼å¼ä¸ºï¼šè¿ç« +NAAAAA+12345";
 						$resultStr = $this->transmitText($object, $contentStr);
 					}
+               
 				}else if(count($cmdArr)==1){
-					//Èç¹ûÖ»ÊäÈë:Î¥ÕÂ£¬Ôò³¢ÊÔ´ÓÊı¾İ¿â¼ÓÔØ³µÅÆ¡¢·¢¶¯»úºÅÂëµÈĞÅÏ¢
+					//å¦‚æœåªè¾“å…¥:è¿ç« ï¼Œåˆ™å°è¯•ä»æ•°æ®åº“åŠ è½½è½¦ç‰Œã€å‘åŠ¨æœºå·ç ç­‰ä¿¡æ¯
                     $flag = $this->getBindingNum($object);
                     if($flag == 1){
 						$bindingInfoArr = $this->getBindingInfo($object);
@@ -160,8 +185,8 @@ class wechatCallbackapiTest
 							$originDataArr = $tvObj->prepareDatatmp($originDataStrzxc,$plateNumber, $engineNumber);
 							$resultStr = $this->transmitNew($object, $originDataArr);
                         }else{
-						//Ã»ÓĞ°ó¶¨ĞÅÏ¢
-						$contentStr = "µ±Ç°ÓÃ»§»¹Ã»ÓĞ°ó¶¨³µÅÆ£¬ÇëÏÈ°ó¶¨ĞÅÏ¢£¬¿ÉÊäÈë¡°Î¥ÕÂ+aaaaaa+12345¡±Ö¸Áî½«ÕËºÅÓë³µÅÆ½øĞĞ°ó¶¨";
+						//æ²¡æœ‰ç»‘å®šä¿¡æ¯
+						$contentStr = "å½“å‰ç”¨æˆ·è¿˜æ²¡æœ‰ç»‘å®šè½¦ç‰Œï¼Œè¯·å…ˆç»‘å®šä¿¡æ¯ï¼Œå¯è¾“å…¥â€œè¿ç« +Naaaaa+12345â€æŒ‡ä»¤å°†è´¦å·ä¸è½¦ç‰Œè¿›è¡Œç»‘å®š";
                         $resultStr = $this->transmitText($object, $contentStr);
                         }
                     }elseif($flag > 1){
@@ -170,53 +195,57 @@ class wechatCallbackapiTest
                         $resultStr = $this->transmitNews($object, $contentStr);
                      
                     }else{
-                        //Ã»ÓĞ°ó¶¨ĞÅÏ¢
-						$contentStr = "µ±Ç°ÓÃ»§»¹Ã»ÓĞ°ó¶¨³µÅÆ£¬ÇëÏÈ°ó¶¨ĞÅÏ¢£¬¿ÉÊäÈë¡°Î¥ÕÂ+aaaaaa+12345¡±Ö¸Áî½«ÕËºÅÓë³µÅÆ½øĞĞ°ó¶¨";
+                        //æ²¡æœ‰ç»‘å®šä¿¡æ¯
+						$contentStr = "å½“å‰ç”¨æˆ·è¿˜æ²¡æœ‰ç»‘å®šè½¦ç‰Œï¼Œè¯·å…ˆç»‘å®šä¿¡æ¯ï¼Œå¯è¾“å…¥â€œè¿ç« +Naaaaa+12345â€æŒ‡ä»¤å°†è´¦å·ä¸è½¦ç‰Œè¿›è¡Œç»‘å®š";
                         $resultStr = $this->transmitText($object, $contentStr);
                     }
 				}else{
-					//Ö¸Áî´íÎó
-					$contentStr = "Ö¸ÁîÓĞÎó£¬ÇëÖØĞÂÊäÈë£¬»òÕßÊäÈë?²éÑ¯ÏµÍ³Ö§³ÖµÄÖ¸Áî";
+					//æŒ‡ä»¤é”™è¯¯
+					$contentStr = "æŒ‡ä»¤æœ‰è¯¯ï¼Œè¯·é‡æ–°è¾“å…¥ï¼Œæˆ–è€…è¾“å…¥?æŸ¥è¯¢ç³»ç»Ÿæ”¯æŒçš„æŒ‡ä»¤";
                     $resultStr = $this->transmitText($object, $contentStr);
 				}
-			}else if(trim($cmdArr[0] == 'ÌìÆø')){
-				//½øĞĞÌìÆø²éÑ¯
+			}else if(trim($cmdArr[0] == 'å¤©æ°”')){
+				//è¿›è¡Œå¤©æ°”æŸ¥è¯¢
                 $url = "http://apix.sinaapp.com/weather/?appkey=".$object->ToUserName."&city=".urlencode($cmdArr[1]); 
                 $output = file_get_contents($url);
                 $content = json_decode($output, true);
                 if(is_array($content)!=1 || count($content)<=0){
-                    $contentStr = "Ã»ÓĞ³ÇÊĞ¡¾".$keyword."¡¿µÄÌìÆøĞÅÏ¢£¬ÇëÈ·ÈÏ¸Ã³ÇÊĞÃû×ÖÊÇ·ñÆ´Ğ´ÕıÈ·£¬¼ì²éºóÇëÖØĞÂÊäÈë²éÑ¯¡£\n»òÕßÊäÈëÎÊºÅ?À´²éÑ¯ÏµÍ³¿ÉÒÔÌá¹©µÄ¹¦ÄÜ¡£";
+                    $contentStr = "æ²¡æœ‰åŸå¸‚ã€".$keyword."ã€‘çš„å¤©æ°”ä¿¡æ¯ï¼Œè¯·ç¡®è®¤è¯¥åŸå¸‚åå­—æ˜¯å¦æ‹¼å†™æ­£ç¡®ï¼Œæ£€æŸ¥åè¯·é‡æ–°è¾“å…¥æŸ¥è¯¢ã€‚\næˆ–è€…è¾“å…¥é—®å·?æ¥æŸ¥è¯¢ç³»ç»Ÿå¯ä»¥æä¾›çš„åŠŸèƒ½ã€‚";
                     $resultStr = $this->transmitText($object, $contentStr);
                 }else{
                     $resultStr = $this->transmitNews($object, $content);
                 }
                 //return $resultStr;
-            }else if(trim($cmdArr[0] == '°ó¶¨')){
+            }else if(trim($cmdArr[0] == 'ç»‘å®š')){
                 $contentStr = $this->binding($object, $cmdArr);
                     
                 $resultStr = $this->transmitText($object, $contentStr);
                 
-            }else if(trim($cmdArr[0] == '½â°ó')){
+            }else if(trim($cmdArr[0] == 'è§£ç»‘')){
                 $contentStr = $this->unbinding($object, $cmdArr);
                 
                 $resultStr = $this->transmitText($object, $contentStr);
                 
-            }else if(trim($cmdArr[0] == '²éÑ¯°ó¶¨')){
+            }else if(trim($cmdArr[0] == 'æŸ¥è¯¢ç»‘å®š')){
                 $contentStr = $this->searchbinding($object);
                 
                 $resultStr = $this->transmitText($object, $contentStr);
                 
-            }else if(trim($cmdArr[0] == '²âÊÔ')){
-                    //²âÊÔ¶à°ó¶¨ÓÃ»§Î¥ÕÂ²éÑ¯
+            }else if(trim($cmdArr[0] == 'æµ‹è¯•')){
+                    //æµ‹è¯•å¤šç»‘å®šç”¨æˆ·è¿ç« æŸ¥è¯¢
                 //$contentStr = array();
                 //$contentStr = $this->autoBindingInfo($object);
                 
                 //$resultStr = $this->transmitText($object, $contentStr);
                 //$resultStr = $this->transmitNews($object, $contentStr);
+                //$obj = $object;
+                //$obj->FromUserName = "oJvG4jiyi4vpllO2RZsN5U_Z5zAw";
+                // $contentStr = "å“¥æ¥éªšæ‰°ä½ äº†";
+                //$resultStr = $this->transmitText($obj, $contentStr);
                 
                 
             }else{
-            	$contentStr = "ÔİÊ±²»Ö§³Ö[".$keyword."]Ö¸Áî¡£\nÕıÈ·µÄÖ¸ÁîÊÇ¡°ÇëÇó+²ÎÊı¡±£¬ÈçÎ¥ÕÂ²éÑ¯ÊäÈë£ºÎ¥ÕÂ+A1234B+12345£¬ÌìÆø²éÑ¯£ºÌìÆø+»³»¯¡£";
+            	$contentStr = "æš‚æ—¶ä¸æ”¯æŒ[".$keyword."]æŒ‡ä»¤ã€‚\næ­£ç¡®çš„æŒ‡ä»¤æ˜¯â€œè¯·æ±‚+å‚æ•°â€ï¼Œå¦‚è¿ç« æŸ¥è¯¢è¾“å…¥ï¼šè¿ç« +N1234B+12345ï¼Œå¤©æ°”æŸ¥è¯¢ï¼šå¤©æ°”+æ€€åŒ–ã€‚å¦‚éœ€è¯¦ç»†å¸®åŠ©è¯·è¾“å…¥ï¼ŸæŸ¥è¯¢";
 				$resultStr = $this->transmitText($object, $contentStr);
                 //return $resultStr;
             }
@@ -225,15 +254,15 @@ class wechatCallbackapiTest
 		
     }
 	
-	//¼òµ¥µÄ°ïÖúº¯Êı£¬¿ÉÌáÊ¾ÓÃ»§µÄÊäÈë
+	//ç®€å•çš„å¸®åŠ©å‡½æ•°ï¼Œå¯æç¤ºç”¨æˆ·çš„è¾“å…¥
 	private function help($object)
 	{
-		$content = "Ğ¡Öú¹¦ÄÜÇë·¢ËÍÈçÏÂÖ¸Áî£º\n1¡¢²éÑ¯ÌìÆøĞÅÏ¢£ºÌìÆø+µØÃû£¬ÈçÌìÆø+»³»¯\n2¡¢²éÑ¯Î¥ÕÂĞÅÏ¢£ºÎ¥ÕÂ+³µÅÆºÅ+·¢¶¯»úºóÎåÎ»£¬ÈçÎ¥ÕÂ+N12345+12345\n3¡¢°ó¶¨³µÁ¾ĞÅÏ¢£º°ó¶¨+³µÅÆºÅ+·¢¶¯»úºóÎåÎ»£¬Èç°ó¶¨+N12345+12345\n4¡¢½â°óĞÅÏ¢£º½â°ó+³µÅÆºÅ£¬Èç½â°ó+N12345\n";
-        $content .="×¢Òâ£º°ó¶¨³µÁ¾ĞÅÏ¢Ö®ºó£¬Ğ¡Öú»á¶¨ÆÚÎªÄú²éÑ¯Î¥ÕÂĞÅÏ¢£¬ÈçÓĞĞÂÎ¥ÕÂ£¬Ğ¡Öú»áµÚÒ»Ê±¼äÍ¨ÖªÄú¡£ÁíÍâ°ó¶¨ÁË³µÁ¾ĞÅÏ¢µÄÓÃ»§¿ÉÒÔÖ±½ÓÊäÈë£ºÎ¥ÕÂ£¬²éÑ¯Î¥ÕÂĞÅÏ¢¡£";
+		$content = "å°åŠ©åŠŸèƒ½è¯·å‘é€å¦‚ä¸‹æŒ‡ä»¤ï¼š\n1ã€æŸ¥è¯¢å¤©æ°”ä¿¡æ¯ï¼šå¤©æ°”+åœ°åï¼Œå¦‚å¤©æ°”+æ€€åŒ–\n2ã€æŸ¥è¯¢è¿ç« ä¿¡æ¯ï¼šè¿ç« +è½¦ç‰Œå·+å‘åŠ¨æœºåäº”ä½ï¼Œå¦‚è¿ç« +N12345+12345\n3ã€ç»‘å®šè½¦è¾†ä¿¡æ¯ï¼šç»‘å®š+è½¦ç‰Œå·+å‘åŠ¨æœºåäº”ä½ï¼Œå¦‚ç»‘å®š+N12345+12345\n4ã€è§£ç»‘ä¿¡æ¯ï¼šè§£ç»‘+è½¦ç‰Œå·ï¼Œå¦‚è§£ç»‘+N12345\n";
+        $content .="æ³¨æ„ï¼šç»‘å®šè½¦è¾†ä¿¡æ¯ä¹‹åï¼Œå°åŠ©ä¼šå®šæœŸä¸ºæ‚¨æŸ¥è¯¢è¿ç« ä¿¡æ¯ï¼Œå¦‚æœ‰æ–°è¿ç« ï¼Œå°åŠ©ä¼šç¬¬ä¸€æ—¶é—´é€šçŸ¥æ‚¨ã€‚å¦å¤–ç»‘å®šäº†è½¦è¾†ä¿¡æ¯çš„ç”¨æˆ·å¯ä»¥ç›´æ¥è¾“å…¥ï¼šè¿ç« ï¼ŒæŸ¥è¯¢è¿ç« ä¿¡æ¯ã€‚";
 		return $this->transmitText($object,$content);
 	}
 	
-	//·¢ËÍ¼òµ¥textÀàĞÍµÄĞÅÏ¢
+	//å‘é€ç®€å•textç±»å‹çš„ä¿¡æ¯
 	private function transmitText($object, $content)
     {
         $textTpl = "<xml>
@@ -247,7 +276,7 @@ class wechatCallbackapiTest
         return $result;
     }
 	
-	//·¢ËÍÍ¼ÎÄÏûÏ¢(¶àÌõ)
+	//å‘é€å›¾æ–‡æ¶ˆæ¯(å¤šæ¡)
 	private function transmitNews($object, $newsArray)
     {
         if(!is_array($newsArray)){
@@ -270,14 +299,14 @@ class wechatCallbackapiTest
 					<MsgType><![CDATA[news]]></MsgType>
 					<ArticleCount>%s</ArticleCount>
 					<Articles>
-					%s</Articles>
+					$item_str</Articles>
 					</xml>";
 
-        $result = sprintf($newsTpl, $object->FromUserName, $object->ToUserName, time(), count($newsArray), $item_str);
+        $result = sprintf($newsTpl, $object->FromUserName, $object->ToUserName, time(), count($newsArray));
         return $result;
     }
 	
-	//·¢ËÍÍ¼ÎÄÏûÏ¢(µ¥Ìõ)
+	//å‘é€å›¾æ–‡æ¶ˆæ¯(å•æ¡)
 	private function transmitNew($object, $newsArray)
     {
         if(!is_array($newsArray)){
@@ -300,17 +329,17 @@ class wechatCallbackapiTest
 					<MsgType><![CDATA[news]]></MsgType>
 					<ArticleCount>%s</ArticleCount>
 					<Articles>
-					%s</Articles>
+					$item_str</Articles>
 					</xml>";
 
-        $result = sprintf($newsTpl, $object->FromUserName, $object->ToUserName, time(), 1, $item_str);
+        $result = sprintf($newsTpl, $object->FromUserName, $object->ToUserName, time(), 1);
         return $result;
     }
     
-    //ÅĞ¶ÏÕËºÅÊÇ·ñ°ó¶¨
+    //åˆ¤æ–­è´¦å·æ˜¯å¦ç»‘å®š
     private function isBinding($object, $cmdArr)
     {
-        //ÅĞ¶ÏÊÇ·ñÒÑ¾­°ó¶¨
+        //åˆ¤æ–­æ˜¯å¦å·²ç»ç»‘å®š
 		$select_sql = "SELECT id from users WHERE plate_num='$cmdArr[1]' and from_user='$object->FromUserName'";
 		$res = _select_data($select_sql);
 		$rows = mysql_fetch_array($res, MYSQL_ASSOC);
@@ -322,10 +351,10 @@ class wechatCallbackapiTest
         return $user_flag;
     }
     
-    //ÅĞ¶ÏÎ¢ĞÅºÅ°ó¶¨³µÅÆºÅÊı
+    //åˆ¤æ–­å¾®ä¿¡å·ç»‘å®šè½¦ç‰Œå·æ•°
     private function getBindingNum($object)
     {
-        //ÅĞ¶ÏÊÇ·ñÒÑ¾­°ó¶¨
+        //åˆ¤æ–­æ˜¯å¦å·²ç»ç»‘å®š
 		$select_sql = "SELECT id from users WHERE from_user='$object->FromUserName'";
 		$res = _select_data($select_sql);
         $num = 0;
@@ -335,19 +364,19 @@ class wechatCallbackapiTest
         return $num;
     }
 	
-	//»ñÈ¡ÕËºÅµÄ°ó¶¨ĞÅÏ¢
+	//è·å–è´¦å·çš„ç»‘å®šä¿¡æ¯
 	private function getBindingInfo($object)
 	{
-		//ÅĞ¶ÏÊÇ·ñÒÑ¾­°ó¶¨
+		//åˆ¤æ–­æ˜¯å¦å·²ç»ç»‘å®š
 		$select_sql = "SELECT * from users WHERE from_user='$object->FromUserName'";
 		$res = _select_data($select_sql);
-		//½ö½ö»ñÈ¡µÚÒ»ĞĞÊı¾İ£¬Èç¹ûĞèÒª»ñÈ¡ËùÓĞĞĞ£¬Ó¦¸ÃÑ­»·Ö´ĞĞmysql_fetch_arrayÓï¾ä
+		//ä»…ä»…è·å–ç¬¬ä¸€è¡Œæ•°æ®ï¼Œå¦‚æœéœ€è¦è·å–æ‰€æœ‰è¡Œï¼Œåº”è¯¥å¾ªç¯æ‰§è¡Œmysql_fetch_arrayè¯­å¥
 		$rows = mysql_fetch_array($res, MYSQL_ASSOC);
 		
         return $rows;
 	}
     
-    //»ñÈ¡°ó¶¨ÕË»§ĞÅÏ¢
+    //è·å–ç»‘å®šè´¦æˆ·ä¿¡æ¯
     private function autoBindingInfo($object)
     {
         //
@@ -359,7 +388,7 @@ class wechatCallbackapiTest
         //$arrayarray = array();
         $InfoArr = array();
         $InfoArr[1] = array (
-			'Title'=>"³µÁ¾Î¥ÕÂĞÅÏ¢",
+			'Title'=>"è½¦è¾†è¿ç« ä¿¡æ¯",
 			'Description'=>"",
 			'PicUrl'=>'',
             'Url'=>''
@@ -374,7 +403,7 @@ class wechatCallbackapiTest
             
             $valueArray = $listObj->getValueData($plateNumber, $engineNumber);
             
-            $instoreflag = $listObj->checkDatatmp($valueArray, $plateNumber, $engineNumber);		//½«Î¥ÕÂĞÅÏ¢´æÈëÊı¾İ¿â
+            $instoreflag = $listObj->checkDatatmp($valueArray, $plateNumber, $engineNumber);		//å°†è¿ç« ä¿¡æ¯å­˜å…¥æ•°æ®åº“
             
             
             $flagInfo = $listObj->updateDatatmp($valueArray, $plateNumber);
@@ -383,7 +412,7 @@ class wechatCallbackapiTest
             if($flagInfo >0){
                 $InfoArr[$num] = $listObj->getMultieDatatmp($plateNumber,$engineNumber);
             }else{
-                $InfoArr[$num] = "Î´²éµ½Ïà¹ØĞÅÏ¢¡£";
+                $InfoArr[$num] = "æœªæŸ¥åˆ°ç›¸å…³ä¿¡æ¯ã€‚";
             }
         }
         
@@ -393,7 +422,7 @@ class wechatCallbackapiTest
         //return $instoreflag;
     }
     
-    //°ó¶¨ÓÃ»§
+    //ç»‘å®šç”¨æˆ·
     private function binding($object, $cmdArr)
     {
         $user_flag = $this->isBinding($object, $cmdArr);
@@ -403,17 +432,17 @@ class wechatCallbackapiTest
             $insert_sql="INSERT INTO users(from_user, plate_num, engine_num, update_time) VALUES('$object->FromUserName','$cmdArr[1]','$cmdArr[2]','$nowtime')";
         	$res = _insert_data($insert_sql);
         	if($res == 1){
-                $ret = "°ó¶¨³É¹¦";
+                $ret = "ç»‘å®šæˆåŠŸ";
         	}elseif($res == 0){
-            	$ret = "°ó¶¨Ê§°Ü";
+            	$ret = "ç»‘å®šå¤±è´¥";
             }
         }else{
-            $ret = "¸ÃÓÃ»§ÒÑ°ó¶¨";
+            $ret = "è¯¥ç”¨æˆ·å·²ç»‘å®š";
         }
         return $ret;
     }
     
-    //½â°óÓÃ»§
+    //è§£ç»‘ç”¨æˆ·
     private function unbinding($object, $cmdArr)
     {
         $user_flag = $this->isBinding($object, $cmdArr);
@@ -421,19 +450,19 @@ class wechatCallbackapiTest
             $delete_sql = "delete from users where plate_num = '$cmdArr[1]'";
             $result = _delete_data($delete_sql);
 			if($result == 1){
-    			$ret = "¸Ã³µÅÆÒÑ½â³ı°ó¶¨";
+    			$ret = "è¯¥è½¦ç‰Œå·²è§£é™¤ç»‘å®š";
 			}elseif($result == 0){
-                $ret = "½â°óÊ§°Ü";
+                $ret = "è§£ç»‘å¤±è´¥";
 			}elseif($result == 2){
-   				$ret = "Ã»ÓĞ¸Ã³µÅÆ°ó¶¨";
+   				$ret = "æ²¡æœ‰è¯¥è½¦ç‰Œç»‘å®š";
             }
         }else{
-            $ret = "¸ÃÓÃ»§Î´°ó¶¨";
+            $ret = "è¯¥ç”¨æˆ·æœªç»‘å®š";
         }
         return $ret;
     }
     
-    //²éÑ¯°ó¶¨Çé¿ö
+    //æŸ¥è¯¢ç»‘å®šæƒ…å†µ
     private function searchbinding($object)
     {
         $select_sql = "SELECT * from users WHERE from_user = '$object->FromUserName'";
@@ -441,11 +470,11 @@ class wechatCallbackapiTest
         //return $res;
         //$rows = mysql_fetch_array($res, MYSQL_ASSOC);
         $num = 0;
-        $ret ="Äú°ó¶¨µÄ³µÅÆÓĞÒÔÏÂ¼¸¸ö£º\n";
+        $ret ="æ‚¨ç»‘å®šçš„è½¦ç‰Œæœ‰ä»¥ä¸‹å‡ ä¸ªï¼š\n";
         while($rows = mysql_fetch_array($res, MYSQL_ASSOC)){
             $num = $num + 1;
             $ret .= $num;
-            $ret .= "¡¢";
+            $ret .= "ã€";
             $ret .= $rows['plate_num'];
             $ret .= "\n";
             //$ret = $num + ".  " + $rows['plate_num'] + '\n';
@@ -453,7 +482,7 @@ class wechatCallbackapiTest
         return $ret;
     }    
 	
-	//ÈÕÖ¾¼ÇÂ¼
+	//æ—¥å¿—è®°å½•
 	private function logger($log_content)
     {
     
@@ -465,16 +494,16 @@ class trafficViolationApi
 {
 	public function getHHData($plateNumber,$engineNumber){
 		$uri = "http://so.jtjc.cn/pl";
-		// ²ÎÊıÊı×é
+		// å‚æ•°æ•°ç»„
 		$data = array (
 				'Fzjg' => 'N',
 				'Webform' => 'jtjc.cn',
 				'WebSite' => 'Index',
 				'd' => '02',
-				't' => 'Ïæ',
+				't' => 'æ¹˜',
 				'p' => $plateNumber,
 				'cjh' => $engineNumber,
-				'btnG' => 'Î¥·¨²éÑ¯'
+				'btnG' => 'è¿æ³•æŸ¥è¯¢'
 		);
 		 
 		$ch = curl_init ();
@@ -497,32 +526,45 @@ class trafficViolationApi
 			$valueCount = count($valueArray);
 			$curCount = ($textCount>$valueCount)?$valueCount:$textCount;
             if($curCount<=0){
-            	$resultStr = "¹§Ï²£¬ÄúÃ»ÓĞÈÎºÎÎ¥ÕÂĞÅÏ¢¡£";
+            	$resultStr = "æ­å–œï¼Œæ‚¨æ²¡æœ‰ä»»ä½•è¿ç« ä¿¡æ¯ã€‚";
             }
-			//»ñÈ¡Ò³ÃæÉÏµÄ´íÎóÌáÊ¾ĞÅÏ¢
+			//è·å–é¡µé¢ä¸Šçš„é”™è¯¯æç¤ºä¿¡æ¯
 			if($textCount==0 && $valueCount==0){
                 $dom_tmp = str_get_dom($return);
                 $msg = $dom_tmp->find('div[class=spx]', 0);
                 if(count($msg)==1){
 					$resultStr = trim($msg->plaintext);
-					
 				}else{
-					$resultStr = "¹§Ï²£¬ÄúÃ»ÓĞÈÎºÎÎ¥ÕÂĞÅÏ¢¡£";
+					$resultStr = "æ­å–œï¼Œæ‚¨æ²¡æœ‰ä»»ä½•è¿ç« ä¿¡æ¯ã€‚";
 				}
             }else{
-				$resultStrArr = "";
+                //$resultStrArr = "";
+                /*
 				for($i=0;$i<$curCount;$i++){
 					$resultStrArr[$i/10] .= ($textArray[$i].$valueArray[$i]." \n");
 				}
-				//Êı¾İ¹ı¶àµÄ»°£¬Ö»·µ»ØµÚÒ»Ìõ£¬ÆäËûµÄ·Åµ½ÏêÇéÒ³ÖĞ
-				/*foreach($resultStrArr as $curResultStr){
-					$resultStr .= $curResultStr."\n";
-				}*/
+				//æ•°æ®è¿‡å¤šçš„è¯ï¼Œåªè¿”å›ç¬¬ä¸€æ¡ï¼Œå…¶ä»–çš„æ”¾åˆ°è¯¦æƒ…é¡µä¸­
 				$resultStr = $resultStrArr[0];
+                */
+                
+                //$valueArray = $listObj->getValueData($plateNumber, $engineNumber);
+            
+            	$instoreflag = $this->checkDatatmp($valueArray, $plateNumber, $engineNumber);		//å°†è¿ç« ä¿¡æ¯å­˜å…¥æ•°æ®åº“
+            
+            
+            	$flagInfo = $this->updateDatatmp($valueArray, $plateNumber);
+            
+            
+            	if($flagInfo >0){
+                	$resultStr = $this->getSimpleDatatmp($plateNumber,$engineNumber);
+            	}else{
+                	$resultStr = "æœªæŸ¥åˆ°ç›¸å…³ä¿¡æ¯ã€‚";
+            	}
+                
 			}
 			
 		}else{
-			$resultStr = "»ñÈ¡ĞÅÏ¢Ê§°Ü";
+			$resultStr = "è·å–ä¿¡æ¯å¤±è´¥";
 		}
 		
 		return $resultStr;
@@ -531,7 +573,7 @@ class trafficViolationApi
 	public function prepareDatatmp($content,$plateNumber,$engineNumber){
         $detailUrl = "http://whucsers.sinaapp.com/violationInfo.php?plateNumber=".$plateNumber."&engineNumber=".$engineNumber;
 		$dataArr = array (
-			'Title'=>'Î¥ÕÂĞÅÏ¢²éÑ¯',
+			'Title'=>'è¿ç« ä¿¡æ¯æŸ¥è¯¢',
 			'Description'=>$content,
 			'PicUrl'=>'',
             'Url'=>$detailUrl
@@ -539,19 +581,19 @@ class trafficViolationApi
 		return $dataArr; 
 	}
     
-    //»ñÈ¡valueArrayÊı×é
+    //è·å–valueArrayæ•°ç»„
     public function getValueData($plateNumber,$engineNumber){
         $uri = "http://so.jtjc.cn/pl";
-		// ²ÎÊıÊı×é
+		// å‚æ•°æ•°ç»„
 		$data = array (
 				'Fzjg' => 'N',
 				'Webform' => 'jtjc.cn',
 				'WebSite' => 'Index',
 				'd' => '02',
-				't' => 'Ïæ',
+				't' => 'æ¹˜',
 				'p' => $plateNumber,
 				'cjh' => $engineNumber,
-				'btnG' => 'Î¥·¨²éÑ¯'
+				'btnG' => 'è¿æ³•æŸ¥è¯¢'
 		);
 		 
 		$ch = curl_init ();
@@ -569,12 +611,12 @@ class trafficViolationApi
         if(count($title)==4){
             $valueArray = $title[2];
         }else{
-            $valueArray = "ÎŞÎ¥ÕÂĞÅÏ¢";
+            $valueArray = "æ— è¿ç« ä¿¡æ¯";
         }
         return $valueArray;
     }
     
-    //´æ´¢Î¥ÕÂĞÅÏ¢½øpeccancyInfo±í
+    //å­˜å‚¨è¿ç« ä¿¡æ¯è¿›peccancyInfoè¡¨
     public function checkDatatmp($valueArray, $plate_num, $engine_num){
         
         $valueNum = count($valueArray);
@@ -592,7 +634,7 @@ class trafficViolationApi
        		$flag_a = $valueArray[$i*10+8];
             $origin_a = $valueArray[$i*10+9];
 
-        	//ÅĞ¶ÏÎ¥ÕÂĞÅÏ¢ÊÇ·ñ´¢´æ£¬²ÉÓÃ³µÅÆºÅ£¬Î¥ÕÂĞĞÎª´úÂë£¬Î¥ÕÂÊ±¼äÈıÖµÈ·¶¨
+        	//åˆ¤æ–­è¿ç« ä¿¡æ¯æ˜¯å¦å‚¨å­˜ï¼Œé‡‡ç”¨è½¦ç‰Œå·ï¼Œè¿ç« è¡Œä¸ºä»£ç ï¼Œè¿ç« æ—¶é—´ä¸‰å€¼ç¡®å®š
             
             $rows = 0;
         	$select_sql = "select * from peccancyInfo where plate_num='$plate_num' and actioncode='$actioncode_a' and occurtime='$occurtime_a'";
@@ -600,24 +642,24 @@ class trafficViolationApi
 			$result = _select_data($select_sql);
         
         	if($rows = mysql_fetch_array($result,MYSQL_ASSOC)){
-            	//¼ì²â¸üĞÂÎ¥ÕÂÊÇ·ñ½É·ÑĞÅÏ¢
-            	$ret = 1;  //Î¥ÕÂÊı¾İÒÑ´æÈëÊı¾İ¿â
+            	//æ£€æµ‹æ›´æ–°è¿ç« æ˜¯å¦ç¼´è´¹ä¿¡æ¯
+            	$ret = 1;  //è¿ç« æ•°æ®å·²å­˜å…¥æ•°æ®åº“
         	}else{
-            	//²åÈëÊı¾İ
+            	//æ’å…¥æ•°æ®
             	$insert_sql = "insert into peccancyInfo(plate_num, engine_num, office, place, actioncode, point, money, action, law, occurtime, flag, origin, update_time) values('$plate_num', '$engine_num', '$office_a','$place_a','$actioncode_a','$point_a','$money_a','$action_a', '$law_a','$occurtime_a','$flag_a','$origin_a', '$nowtime')";
 
 				$res = _insert_data($insert_sql);
             	if($res == 1){
-                	$ret = 2;  //²åÈë³É¹¦
+                	$ret = 2;  //æ’å…¥æˆåŠŸ
 				}else{
-                	$ret = 0;  //²åÈëÊ§°Ü
+                	$ret = 0;  //æ’å…¥å¤±è´¥
             	}
         	}
         }
         return $ret;
     }
     
-    //¼ÆËã²¢´æ´¢Î¥ÕÂ¸ÅÒª½øpeccancyBerif±í
+    //è®¡ç®—å¹¶å­˜å‚¨è¿ç« æ¦‚è¦è¿›peccancyBerifè¡¨
     public function updateDatatmp($valueArray, $plate_num){
         
         //$allitems = 0;
@@ -628,7 +670,7 @@ class trafficViolationApi
         
         $valueCount = count($valueArray);
         
-        $items = $valueCount/10;   //´¦·£ÏîÊı
+        $items = $valueCount/10;   //å¤„ç½šé¡¹æ•°
         
         $nowtime = date("Y-m-d G:i:s");
         
@@ -636,9 +678,9 @@ class trafficViolationApi
         
         for($i=0; $i<=($valueCount/10); $i++){
 
-            $allpoint = $allpoint + $valueArray[$i*10+3];		//´¦·£¿Û·Ö
-            $allmoney = $allmoney + $valueArray[$i*10+4];       //´¦·£½ğ¶î
-            //$allitems = $allitems + 1;						//´¦·£ÏîÊı
+            $allpoint = $allpoint + $valueArray[$i*10+3];		//å¤„ç½šæ‰£åˆ†
+            $allmoney = $allmoney + $valueArray[$i*10+4];       //å¤„ç½šé‡‘é¢
+            //$allitems = $allitems + 1;						//å¤„ç½šé¡¹æ•°
         }
         
              
@@ -649,16 +691,16 @@ class trafficViolationApi
         
         if($rows = mysql_fetch_array($result,MYSQL_ASSOC)){
             
-        	//¸üĞÂÊı¾İ
+        	//æ›´æ–°æ•°æ®
 			$update_sql = "update peccancyBerif set all_items='$items',all_point='$allpoint',all_money='$allmoney' where plate_num='$plate_num'";
 
 			$res = _update_data($update_sql);
 			if($res == 1){
-                return 1;    //¸üĞÂ³É¹¦
+                return 1;    //æ›´æ–°æˆåŠŸ
 			}elseif($res == 0){
-                return 0;    //¸üĞÂÊ§°Ü
+                return 0;    //æ›´æ–°å¤±è´¥
 			}elseif($res == 2){
-                return 2;   //Ã»ÓĞĞĞÊÜµ½Ó°Ïì
+                return 2;   //æ²¡æœ‰è¡Œå—åˆ°å½±å“
 			}
 
         }else{
@@ -666,16 +708,45 @@ class trafficViolationApi
 
 			$res = _insert_data($insert_sql);
 			if($res == 1){
-                return 3;   //²åÈë³É¹¦
+                return 3;   //æ’å…¥æˆåŠŸ
 			}else{
 
-                return -1;   //²åÈëÊ§°Ü
+                return -1;   //æ’å…¥å¤±è´¥
 			}
         }
         
     }
     
-    //ºÏ³ÉÎ¥ÕÂ¸ÅÒªĞÅÏ¢
+    //å•ä¸ªè¿ç« æ¦‚è¦ä¿¡æ¯
+    public function getSimpleDatatmp($plateNumber,$engineNumber){
+        
+        $select_sql = "select * from peccancyBerif where plate_num='$plateNumber'";
+
+		$result = _select_data($select_sql);
+        
+        $berif = "";
+        
+        if($rows = mysql_fetch_array($result,MYSQL_ASSOC)){
+            $berif .= "è½¦ç‰Œå·ï¼šæ¹˜";
+            $berif .= $plateNumber;
+            $berif .= "\nå°šæœªæ¶ˆé™¤è¿ç« ";
+            $berif .= $rows['all_items'];
+            $berif .= "é¡¹ï¼Œå…±æ‰£åˆ†";
+            $berif .= $rows['all_point'];
+            $berif .= "åˆ†ï¼Œå…±ç½šæ¬¾";
+            $berif .= $rows['all_money'];
+            $berif .= "å…ƒã€‚";
+            //$berif .="\nç‚¹å‡»æŸ¥çœ‹è¯¦æƒ…ã€‚";
+        }else{
+            $berif .= "è½¦ç‰Œå·ï¼šæ¹˜";
+            $berif .= $plateNumber;
+            $berif .= "\næ— è¿ç« è®°å½•ã€‚";
+        }
+       
+		return $berif; 
+	}
+    
+    //åˆæˆå¤šé¡¹è¿ç« æ¦‚è¦ä¿¡æ¯
     public function getMultieDatatmp($plateNumber,$engineNumber){
         
         $select_sql = "select * from peccancyBerif where plate_num='$plateNumber'";
@@ -685,20 +756,20 @@ class trafficViolationApi
         $berif = "";
         
         if($rows = mysql_fetch_array($result,MYSQL_ASSOC)){
-            $berif .= "³µÅÆºÅ£ºÏæ";
+            $berif .= "è½¦ç‰Œå·ï¼šæ¹˜";
             $berif .= $plateNumber;
-            $berif .= "\nÉĞÎ´Ïû³ıÎ¥ÕÂ";
+            $berif .= "\nå°šæœªæ¶ˆé™¤è¿ç« ";
             $berif .= $rows['all_items'];
-            $berif .= "Ïî£¬¹²¿Û·Ö";
+            $berif .= "é¡¹ï¼Œå…±æ‰£åˆ†";
             $berif .= $rows['all_point'];
-            $berif .= "·Ö£¬¹²·£¿î";
+            $berif .= "åˆ†ï¼Œå…±ç½šæ¬¾";
             $berif .= $rows['all_money'];
-            $berif .= "Ôª¡£";
-            $berif .="\nµã»÷²é¿´ÏêÇé¡£";
+            $berif .= "å…ƒã€‚";
+            $berif .="\nç‚¹å‡»æŸ¥çœ‹è¯¦æƒ…ã€‚";
         }else{
-            $berif .= "³µÅÆºÅ£ºÏæ";
+            $berif .= "è½¦ç‰Œå·ï¼šæ¹˜";
             $berif .= $plateNumber;
-            $berif .= "\nÎŞÎ¥ÕÂ¼ÇÂ¼¡£";
+            $berif .= "\næ— è¿ç« è®°å½•ã€‚";
         }
         
         $detailUrl = "http://whucsers.sinaapp.com/violationInfo.php?plateNumber=".$plateNumber."&engineNumber=".$engineNumber;
@@ -717,34 +788,34 @@ class trafficViolationApi
 
 class ParamCheckUtil
 {
-	//¼ì²éÊäÈë²ÎÊıµÄ¸ñÊ½£¬¸ñÊ½±ØĞëÎªÎ¥ÕÂ+aaaaaa+12345£¬Èç¹û¸ñÊ½ÕıÈ·£¬Ôò·µ»ØÀïÃæÓĞËÄ¸öÔªËØµÄÊı×é£¬Ê×¸öÔªËØ±ê¼ÇÚÀtrue»òÕßfalse£¬±íÊ¾²ÎÊı¼ì²âµÄ½á¹û
+	//æ£€æŸ¥è¾“å…¥å‚æ•°çš„æ ¼å¼ï¼Œæ ¼å¼å¿…é¡»ä¸ºè¿ç« +aaaaaa+12345ï¼Œå¦‚æœæ ¼å¼æ­£ç¡®ï¼Œåˆ™è¿”å›é‡Œé¢æœ‰å››ä¸ªå…ƒç´ çš„æ•°ç»„ï¼Œé¦–ä¸ªå…ƒç´ æ ‡è®°è¯¶trueæˆ–è€…falseï¼Œè¡¨ç¤ºå‚æ•°æ£€æµ‹çš„ç»“æœ
 	public function trafficViolationParamCheck($cmd,$plateNumber,$engineNumber){
 		$finalParams = array();
-		$checkFlag = true;//±ê¼Ç²ÎÊı¼ì²âµÄ½á¹û
+		$checkFlag = true;//æ ‡è®°å‚æ•°æ£€æµ‹çš„ç»“æœ
 		$finalCmd = trim($cmd);
 		$finalPlateNumber = trim($plateNumber);
 		$finalEngineNumber = trim($engineNumber);
-		if(trim($cmd)=="Î¥ÕÂ"){
+		if(trim($cmd)=="è¿ç« "){
 			$finalParams[1] = $finalCmd;
 		}else{
 			$checkFlag = false;
 		}
-		//³µÅÆºÅ
+		//è½¦ç‰Œå·
 		$finalPlateNumberLength = strlen($finalPlateNumber);
 		if($finalPlateNumberLength==6){
 			$finalParams[2] = $finalPlateNumber;
-		}else if(($finalPlateNumberLength==9) && strpos($finalPlateNumber,"Ïæ")==0){//ÖĞÎÄ³¤¶ÈÎª3
+		}else if(($finalPlateNumberLength==9) && strpos($finalPlateNumber,"æ¹˜")==0){//ä¸­æ–‡é•¿åº¦ä¸º3
 			$finalParams[3] = substr($finalPlateNumber,3);
 		}else{
 			$checkFlag = false;
 		}
-		//ÒıÇæºÅ
+		//å¼•æ“å·
 		if(strlen($engineNumber)==5){
 			$finalParams[3] = $finalEngineNumber;
 		}else{
 			$checkFlag = false;
 		}
-		//½«±ê¼ÇµÄ½á¹ûÌî³äµ½·µ»ØÊı×éÖĞ
+		//å°†æ ‡è®°çš„ç»“æœå¡«å……åˆ°è¿”å›æ•°ç»„ä¸­
 		$finalParams[0] = $checkFlag;
 		
 		return $finalParams;

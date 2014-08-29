@@ -55,6 +55,10 @@ if(isset($_GET['plateNumber']) && isset($_GET['engineNumber'])){
         }
         $resultStrArrCount = count($resultStrArr);
         //var_dump($resultStrArr[0]);
+        echo "车牌：湘";
+        echo $plateNumber;
+        echo "违章信息如下：<br />";
+            
         for($i=0;$i<$resultStrArrCount;$i++){
             echo "<p>".($i+1).".</p>";
             echo $resultStrArr[$i];

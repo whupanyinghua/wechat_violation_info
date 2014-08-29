@@ -20,12 +20,65 @@ $create_sql = "CREATE TABLE IF NOT EXISTS `test_mysql` (
 
 echo _create_table($create_sql);
 
+$create_sql = "CREATE TABLE IF NOT EXISTS `peccancyInfo` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `plate_num` varchar(40) DEFAULT NULL,
+  `engine_num` varchar(40) DEFAULT NULL,
+  `office` varchar(256) DEFAULT NULL,
+  `place` varchar(256) DEFAULT NULL,
+  `actioncode` int(11) DEFAULT NULL,
+  `point` int(11) DEFAULT NULL,
+  `money` int(11) DEFAULT NULL,
+  `action` varchar(256) DEFAULT NULL,
+  `law` varchar(256) DEFAULT NULL,
+  `occurtime` datetime DEFAULT NULL,
+  `flag` varchar(256) DEFAULT NULL,
+  `origin` varchar(256) DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+   PRIMARY KEY (`id`)
+)";
+
+echo _create_table($create_sql);
+
+$create_sql = "CREATE TABLE IF NOT EXISTS `peccancyBerif` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `plate_num` varchar(40) DEFAULT NULL,
+  `all_items` int(11) DEFAULT NULL,
+  `all_point` int(11) DEFAULT NULL,
+  `all_money` int(11) DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+   PRIMARY KEY (`id`)
+)";
+
+echo _create_table($create_sql);
+
 
 $create_sql = "CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `from_user` varchar(40) DEFAULT NULL,
   `plate_num` varchar(40) DEFAULT NULL,
   `engine_num` varchar(40) DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+)";
+
+echo _create_table($create_sql);
+
+$create_sql = "CREATE TABLE IF NOT EXISTS `addUser` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `from_user` varchar(40) DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+)";
+
+echo _create_table($create_sql);
+
+$create_sql = "CREATE TABLE IF NOT EXISTS `searchUser` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `from_user` varchar(40) DEFAULT NULL,
+  `plate_num` varchar(40) DEFAULT NULL,
+  `engine_num` varchar(40) DEFAULT NULL,
+  `searchtimes` int(11) DEFAULT '0',
   `update_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 )";
@@ -68,6 +121,7 @@ if($res == 1){
 }
 */
 //检索数据
+/*
 $select_sql = "select * from test_mysql";
 
 $result = _select_data($select_sql);
@@ -78,6 +132,20 @@ while($rows = mysql_fetch_array($result,MYSQL_ASSOC)){
     echo "<br />";
 
 }
+
+*/  
+
+$plate_num = 'N9778B';
+
+			$update_sql = "update peccancyBerif set all_items = 11 where plate_num = '$plate_num'";
+			$res = _update_data($update_sql);
+			if($res == 1){
+    			echo "更新成功";
+			}elseif($res == 0){
+    			echo "更新失败";
+			}elseif($res == 2){
+  				  echo "没有行受到影响";
+			}
 
 /*
 //删除表
